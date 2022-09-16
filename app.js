@@ -21,7 +21,7 @@ const inputField = document.getElementById("nameInput")
 const submitButton = document.getElementById("submitName")
 
 const playerContainer = document.getElementById("playerStatus")
-
+let startButton = document.createElement("button")
 
 submitButton.addEventListener('click', function nameSelect () {
     const nameField = document.getElementById("playerName")
@@ -33,7 +33,7 @@ submitButton.addEventListener('click', function nameSelect () {
     inputField.className = "hidden"
     
     //PREVIOUSLY DEFINED
-    let startButton = document.createElement("button")
+    
     
     startButton.innerText = "Start!"
     
@@ -81,68 +81,66 @@ document.getElementById('bestScore').innerText = `Best: 0`
 
 //FUINCTIONS /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Create Snake
+
+
+
 let gameState = {
     apple: [11, 8],
     snake: {
-        body : [ [10, 5], [10, 6], [10, 7], [10, 8]],
+        body : [ [10, 5], [10, 6], [10, 7]],
         nextDirection: [0, 1]
     }
   }
 
-
-
-
-
-
-function render () {
+startButton.addEventListener('click', function startGame () {
+    function render () {
     
-    let snakeBody = gameState.snake.body
-    snakeBody.forEach(element => {
-    boardElm.children[element[0]].children[element[1]].className = 'snake'
+        let snakeBody = gameState.snake.body
+        snakeBody.forEach(element => {
+        
+            boardElm.children[element[0]].children[element[1]].className = 'snake'
+        
+        
+    });
     
-    
-});
-}
-
-
+    }
     
     
-function tick () {
     
-    gameState.snake.body.forEach(element => {
-      element[0] , element [1] += 1})
-   
-}
-
-
-// function updateSnake () {
+        function tick () {
+        let currentHead = gameState.snake.body[gameState.snake.body.length - 1]
+        // [10, 8] 
+        let newHead = [currentHead[0] + gameState.snake.nextDirection[0], currentHead[1] + gameState.snake.nextDirection[1]]
+        
+        gameState.snake.body.push(newHead)
+        boardElm.children[gameState.snake.body[0][0]].children[gameState.snake.body[0][1]].className = 'cell'
+        gameState.snake.body.shift()
+        
+       
+    }
     
-//     gameState.snake.body.shift()
-//     gameState.snake.body.push()
     
-// }
-
-
-// document.onkeydown = function keyPress(e) {
-//     {if (e.keyCode === 38) {
-//     gameState.snake.nextDirection = [1, 0] // Up Key
-//   } else if (e.keyCode === 40) {
-//     gameState.snake.nextDirection = [-1, 0]// Up Key
-//   } else if (e.keyCode === 37) {
-//     gameState.snake.nextDirection = [0, -1]
-//   } else if (e.keyCode === 39) {
-//     gameState.snake.nextDirection = [0, 1]
-//   }
-// }
-// }
-
-
-
-
-
-
+    document.onkeydown = function keyPress(e) {
+        {if (e.keyCode === 38) {
+        gameState.snake.nextDirection = [-1, 0] // Up Key
+      } else if (e.keyCode === 40) {
+        gameState.snake.nextDirection = [1, 0]// Up Key
+      } else if (e.keyCode === 37) {
+        gameState.snake.nextDirection = [0, -1]
+      } else if (e.keyCode === 39) {
+        gameState.snake.nextDirection = [0, 1]
+      }
+    }
+    }
     
-setInterval(() => {
-    render()
-    tick ()
-}, 1000 / 5)
+        
+    setInterval(() => {
+        
+        render()
+        
+        tick ()
+        
+    }, 1000 / 5)
+
+})
+

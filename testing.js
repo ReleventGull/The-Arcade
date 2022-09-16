@@ -13,10 +13,14 @@
 
 
 
-let arrayofBs = [1,2,3,4,5]
+let arrayofBs = [[1],[2],[3],[4],[5],[5]]
 
 
+arrayofBs.push([4+4, 4+4])
 
-arrayofBs.shift()
 
 console.log(arrayofBs)
+
+
+
+
