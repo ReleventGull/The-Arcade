@@ -11,7 +11,11 @@
 //RENDER TIME
 
 
-
+window.addEventListener("keydown", function(e) {
+    if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+        e.preventDefault();
+    }
+}, false);
 
 
 
@@ -21,8 +25,8 @@ const inputField = document.getElementById("nameInput")
 const submitButton = document.getElementById("submitName")
 
 const playerContainer = document.getElementById("playerStatus")
-let startButton = document.createElement("button")
 
+let startButton = document.createElement("button")
 submitButton.addEventListener('click', function nameSelect () {
     const nameField = document.getElementById("playerName")
     const inputValue = document.getElementById("nameInput").value
@@ -97,11 +101,12 @@ startButton.addEventListener('click', function startGame () {
     
         let snakeBody = gameState.snake.body
         snakeBody.forEach(element => {
-        
+            
             boardElm.children[element[0]].children[element[1]].className = 'snake'
         
         
-    });
+    }
+    );
     
     }
     
@@ -112,11 +117,18 @@ startButton.addEventListener('click', function startGame () {
         // [10, 8] 
         let newHead = [currentHead[0] + gameState.snake.nextDirection[0], currentHead[1] + gameState.snake.nextDirection[1]]
         
-        gameState.snake.body.push(newHead)
-        boardElm.children[gameState.snake.body[0][0]].children[gameState.snake.body[0][1]].className = 'cell'
-        gameState.snake.body.shift()
-        
        
+        
+        
+        gameState.snake.body.push(newHead)
+        removeTail ()
+        
+        gameState.snake.body.shift()
+       
+    }
+
+    function removeTail () {
+        boardElm.children[gameState.snake.body[0][0]].children[gameState.snake.body[0][1]].className = 'cell'
     }
     
     
@@ -135,12 +147,13 @@ startButton.addEventListener('click', function startGame () {
     
         
     setInterval(() => {
-        
+        render()
+        tick ()
         render()
         
-        tick ()
         
-    }, 1000 / 5)
+        
+    }, 4000 / 35)
 
 })
 
