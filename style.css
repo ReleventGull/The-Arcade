@@ -117,6 +117,14 @@ li {
 }
 
 
+#currentNum {
+    display: inline;
+}
+
+#bestNum {
+    display: inline;
+}
+
 
 
 
