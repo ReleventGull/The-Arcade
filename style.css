@@ -79,6 +79,12 @@ margin-bottom: 20px;
     margin-top: 10px;
     animation: transitionIn 1s;
 }
+.resetBut {
+    height: 2.5vh;
+    width: 8vh;
+    margin-top: 10px;
+    animation: transitionIn 1s;
+}
 
 
 
