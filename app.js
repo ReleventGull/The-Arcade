@@ -93,18 +93,18 @@ let gameState = {
     snake: {
         body : [ [10, 5], [10, 6], [10, 7]],
         nextDirection: [0, 1]
-    }
+    },
+    currentScore: 0,
+    bestScore: 0,
+    gameRunning: false
+    
   }
  
-  let appleCor =  boardElm.children[gameState.apple[0]].children[gameState.apple[1]]
 
 
- 
-  
   
 
-let currentNumstr = document.getElementById("currentNum").innerText = 0
-let bestNumstr = document.getElementById("bestNum").innerText = 0
+
 
 
 
@@ -112,36 +112,58 @@ let bestNumstr = document.getElementById("bestNum").innerText = 0
 
   
   startButton.addEventListener('click', function startGame () {
+    gameState.gameRunning = true
     
     function render () {
         renderApple()
         
         console.log(gameState.apple)
+      let genSnake = 
         gameState.snake.body.forEach(element => {
             
             boardElm.children[element[0]].children[element[1]].className = 'snake'
             
     });
-    
-    
-    
+  
     }
     
         
         
     function tick () {
+        
+       
+        
+    
+
             let currentHead = gameState.snake.body[gameState.snake.body.length - 1]
             let newHead = [currentHead[0] + gameState.snake.nextDirection[0], currentHead[1] + gameState.snake.nextDirection[1]]
             gameState.snake.body.push(newHead)
             
+            for (let i = 0; i < gameState.snake.body.length - 2; i++) {
+                
+                let currentSeg = gameState.snake.body[i]
+                
+                if ((currentSeg[0] === newHead[0] && currentSeg[1] === newHead[1]))
+                 {
+                    gameState.gameRunning = false
+                    console.log(gameState.gameRunning)
+                }
+            }
+            
+            
+           
             if (!(gameState.snake.body[gameState.snake.body.length - 1][0] === gameState.apple[0] && gameState.snake.body[gameState.snake.body.length - 1][1] === gameState.apple[1])) {
                 removeTail ()
              
             } else if ((newHead[0] === gameState.apple[0]) && (newHead[1] === gameState.apple[1])) {
-                
+                if (gameState.currentScore === gameState.bestScore) {
+                    
+                    gameState.bestScore ++
+                }
+                gameState.currentScore ++
                 gameState.apple.shift()
                 newApplePosition ()
-                
+ 
                 
              }
             
@@ -150,12 +172,14 @@ let bestNumstr = document.getElementById("bestNum").innerText = 0
 
     function newApplePosition () {
         let randomRowIdx = Math.floor(Math.random () * (document.getElementsByClassName("row").length - 1))
-let randomCellIdx = Math.floor(Math.random () * (document.getElementsByClassName("row").length - 1))
+        let randomCellIdx = Math.floor(Math.random () * (document.getElementsByClassName("row").length - 1))
         gameState.apple = [randomRowIdx, randomCellIdx]
         
         
     }
 function renderApple() {
+    document.getElementById("currentNum").innerText = gameState.currentScore
+    document.getElementById("bestNum").innerText = gameState.bestScore
     boardElm.children[gameState.apple[0]].children[gameState.apple[1]].className = 'apple'
 }
     
@@ -163,11 +187,7 @@ function renderApple() {
         boardElm.children[gameState.snake.body[0][0]].children[gameState.snake.body[0][1]].className = 'cell'
         gameState.snake.body.shift()
     }
-    //Loop through each Row and Cell
-    //Grab a random Row
-    //Grab a random Cell
-    //push that into gameState.apple
-    //render that in tick??
+
     
     
     
@@ -187,12 +207,15 @@ function renderApple() {
     }
     
         
-    setInterval(() => {
-        tick ()
-        render()
-        
+    setInterval(() => {    
+            if(gameState.gameRunning === true) {
+                tick ()
+                render()
+            }
+ 
     }, 4000 / 35)
 
 }
 )
+
 
