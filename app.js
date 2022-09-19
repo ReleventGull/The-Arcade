@@ -136,7 +136,7 @@ let winText = document.createElement('div')
 
     gameState.gameRunning = true
     startButton.classList = 'hidden'
-    console.log(startButton.classList)
+    
     function render () {
         
         renderApple()
@@ -158,7 +158,7 @@ let winText = document.createElement('div')
 
 
        function tick() {
-        console.log('tick')
+        
         let snakeBody = gameState.snake.body
         let currentDirection = gameState.snake.nextDirection
         let currentHead = snakeBody[snakeBody.length - 1]
@@ -170,8 +170,8 @@ let winText = document.createElement('div')
             resetButton.className = "resetBut"
             playerContainer.append(resetButton)
             let endingLength = gameState.snake.body.length
-            
-            winText.innerText = `You Lose! Your snake was ${endingLength} pixels long!`
+            let endingApple = gameState.currentScore
+            winText.innerText = `You Lose! Your snake was ${endingLength} pixels long! You ate ${endingApple} apples!`
             winText.className = 'gameText'
             playerContainer.append(winText)
 
@@ -192,6 +192,8 @@ let winText = document.createElement('div')
                 winText.innerText = `You Lose! Your snake was ${endingLength} pixels long!`
                 winText.className = 'gameText'
                 playerContainer.append(winText)
+                let endingApple = gameState.currentScore
+            winText.innerText = `You Lose! Your snake was ${endingLength} pixels long! You ate ${endingApple} apples!`
                 gameState.gameRunning = false
                 return
             }
@@ -214,7 +216,7 @@ let winText = document.createElement('div')
 function increaseScore () {
     
     if (gameState.currentScore === gameScore.bestScore  ) {
-        console.log("+1")
+        
         gameState.currentScore ++
         gameScore.bestScore ++
     } else {
@@ -233,7 +235,7 @@ function removeTail () {
 function newApple () {
     
     let snakeHead = gameState.snake.body[gameState.snake.body.length - 1]
-    console.log(snakeHead[0])
+    
     while((snakeHead[0] === gameState.apple[0]) && (snakeHead[1] === gameState.apple[1])) {
         let randomRowIdx = Math.floor(Math.random () * (document.getElementsByClassName("row").length - 1))
         let randomCellIdx = Math.floor(Math.random () * (document.getElementsByClassName("row").length - 1))
@@ -273,19 +275,16 @@ function newApple () {
       }
     }
     }
-setInterval(() => {    
+
     function runGame () {
         tick ()
         render ()
         
     }
-       
-    
+interval = setInterval(() => {    
             if(gameState.gameRunning === true) {
                 runGame ()
-                
-                
-                
+
             }
             
  
@@ -306,10 +305,11 @@ while (table.firstChild) {
 }
 buildIntialState  ()
 winText.remove()
+
   resetButton.className = 'hidden'
   startButton.classList = 'startBut'
     
-  
+  clearInterval(interval)
      
 }
 )
