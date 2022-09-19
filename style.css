@@ -88,7 +88,11 @@ margin-bottom: 20px;
     animation: transitionIn 1s;
 }
 
+.gameText  {
+    margin-top: 10px;
+    margin-bottom: 10px;
 
+}
 /*HIDE INPUT FIELDS AFTER INPUTTING NAME AND REVEAL START BUTTON*/
 .hidden {
     display: none;

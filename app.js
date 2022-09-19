@@ -128,11 +128,12 @@ gameScore = {
   
 
 
-
+let winText = document.createElement('div')
   let resetButton = document.createElement("button")
 
   
   startButton.addEventListener('click', function startGame () {
+
     gameState.gameRunning = true
     startButton.classList = 'hidden'
     console.log(startButton.classList)
@@ -168,6 +169,11 @@ gameScore = {
             resetButton.innerText = "Reset!"
             resetButton.className = "resetBut"
             playerContainer.append(resetButton)
+            let endingLength = gameState.snake.body.length
+            
+            winText.innerText = `You Lose! Your snake was ${endingLength} pixels long!`
+            winText.className = 'gameText'
+            playerContainer.append(winText)
 
             gameState.gameRunning = false
                 
@@ -182,8 +188,11 @@ gameScore = {
                 resetButton.innerText = "Reset!"
                 resetButton.className = "resetBut"
                 playerContainer.append(resetButton)
+                let endingLength = gameState.snake.body.length
+                winText.innerText = `You Lose! Your snake was ${endingLength} pixels long!`
+                winText.className = 'gameText'
+                playerContainer.append(winText)
                 gameState.gameRunning = false
-
                 return
             }
         }
@@ -280,7 +289,7 @@ setInterval(() => {
             }
             
  
-    }, 100)
+    }, 80)
     
 
 
@@ -296,6 +305,7 @@ while (table.firstChild) {
     table.removeChild(table.firstChild)
 }
 buildIntialState  ()
+winText.remove()
   resetButton.className = 'hidden'
   startButton.classList = 'startBut'
     
