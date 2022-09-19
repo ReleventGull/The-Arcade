@@ -28,6 +28,7 @@ const playerContainer = document.getElementById("playerStatus")
 
 let startButton = document.createElement("button")
 submitButton.addEventListener('click', function nameSelect () {
+    buildIntialState ()
     const nameField = document.getElementById("playerName")
     const inputValue = document.getElementById("nameInput").value
     nameField.innerText = `Player Name: ${inputValue}`
@@ -38,42 +39,75 @@ submitButton.addEventListener('click', function nameSelect () {
     
     //PREVIOUSLY DEFINED
     
-    
     startButton.innerText = "Start!"
-    
     startButton.className = "startBut"
     playerContainer.append(startButton)
 
+
+    //Reset Button
+  
    
     
     
 })
 // Creating the Board Element//
-  let boardElm = document.querySelector("#grid")
+ 
 
 
-  //Initial State
-    //Create rows and push the columns into the rows
-    for(let row = 1; row <= 20; row++) {
-        
-        const rowElm = document.createElement('tr')
-        
-        boardElm.append(rowElm)
-        
-        rowElm.className = "row"
-       
-        for (let col = 1; col <= 20; col ++) {
-            
-            const cellElm = document.createElement('td')
-            
-            rowElm.append(cellElm)
+let boardElm = document.querySelector("#grid")
+let gameState = {
+    apple: [11, 8],
+    snake: {
+        body : [ [10, 5], [10, 6], [10, 7]],
+        nextDirection: [0, 1]
+    },
+    currentScore: 0,
+    bestScore: 0,
+    gameRunning: false
+    
+  }
+   
 
-            cellElm.className = "cell"
+
+    //Initial State
+      //Create rows and push the columns into the rows
+    function buildIntialState () {
+        for(let row = 1; row <= 20; row++) {
+          
+            const rowElm = document.createElement('tr')
             
+            boardElm.append(rowElm)
+            
+            rowElm.className = "row"
+           
+            for (let col = 1; col <= 20; col ++) {
+                
+                const cellElm = document.createElement('td')
+                
+                rowElm.append(cellElm)
+    
+                cellElm.className = "cell"
+                
+        }
+    
     }
-
+  gameState = {
+    apple: [11, 8],
+    snake: {
+        body : [ [10, 5], [10, 6], [10, 7]],
+        nextDirection: [0, 1]
+    },
+    currentScore: 0,
+    bestScore: 0,
+    gameRunning: false
+    
+  }
+    }
+     
+  
+gameScore = {
+    bestScore: 0
 }
-
  
 
 
@@ -88,111 +122,136 @@ submitButton.addEventListener('click', function nameSelect () {
 
 
 
-let gameState = {
-    apple: [11, 8],
-    snake: {
-        body : [ [10, 5], [10, 6], [10, 7]],
-        nextDirection: [0, 1]
-    },
-    currentScore: 0,
-    bestScore: 0,
-    gameRunning: false
-    
-  }
  
 
-
+  
   
 
 
 
-
-
-
+  let resetButton = document.createElement("button")
 
   
   startButton.addEventListener('click', function startGame () {
     gameState.gameRunning = true
-    
+    startButton.classList = 'hidden'
+    console.log(startButton.classList)
     function render () {
+        
         renderApple()
+        if (gameState.gameRunning === true){
+            gameState.snake.body.forEach(element => {
+                
+                boardElm.children[element[0]].children[element[1]].className = 'snake'
+                
+        });
+        }
+        return
         
-        console.log(gameState.apple)
-      let genSnake = 
-        gameState.snake.body.forEach(element => {
-            
-            boardElm.children[element[0]].children[element[1]].className = 'snake'
-            
-    });
-  
+    
     }
     
+
+//REWITE TICK
+//
+
+
+       function tick() {
+        console.log('tick')
+        let snakeBody = gameState.snake.body
+        let currentDirection = gameState.snake.nextDirection
+        let currentHead = snakeBody[snakeBody.length - 1]
+        let newhead = [(currentHead[0] + currentDirection[0]), (currentHead[1] + currentDirection[1])]
         
-        
-    function tick () {
-        
+        if (newhead[0] > 19 || newhead[0] < 0 || newhead[1] > 19 || newhead[1] < 0) {
+            
+            resetButton.innerText = "Reset!"
+            resetButton.className = "resetBut"
+            playerContainer.append(resetButton)
+
+            gameState.gameRunning = false
+                
+            
+            
+                return
+        } 
        
-        
-    
+        for (let i = 0; i < snakeBody.length - 2; i ++){
+            if (snakeBody[snakeBody.length - 1][0] === snakeBody[i][0] && snakeBody[snakeBody.length - 1][1] === snakeBody[i][1]) {
+                
+                resetButton.innerText = "Reset!"
+                resetButton.className = "resetBut"
+                playerContainer.append(resetButton)
+                gameState.gameRunning = false
 
-            let currentHead = gameState.snake.body[gameState.snake.body.length - 1]
-            let newHead = [currentHead[0] + gameState.snake.nextDirection[0], currentHead[1] + gameState.snake.nextDirection[1]]
-            gameState.snake.body.push(newHead)
-            
-            for (let i = 0; i < gameState.snake.body.length - 2; i++) {
-                
-                let currentSeg = gameState.snake.body[i]
-                
-                if ((currentSeg[0] === newHead[0] && currentSeg[1] === newHead[1]))
-                 {
-                    gameState.gameRunning = false
-                    console.log(gameState.gameRunning)
-                }
+                return
             }
-            
-            
-           
-            if (!(gameState.snake.body[gameState.snake.body.length - 1][0] === gameState.apple[0] && gameState.snake.body[gameState.snake.body.length - 1][1] === gameState.apple[1])) {
-                removeTail ()
-             
-            } else if ((newHead[0] === gameState.apple[0]) && (newHead[1] === gameState.apple[1])) {
-                if (gameState.currentScore === gameState.bestScore) {
-                    
-                    gameState.bestScore ++
-                }
-                gameState.currentScore ++
-                gameState.apple.shift()
-                newApplePosition ()
- 
-                
-             }
-            
-                 
-    }
+        }
+         
+        if (newhead[0] === gameState.apple[0] && newhead[1] === gameState.apple[1]) {
+            snakeBody.push(newhead)
+            increaseScore ()
+            newApple ()
+        }
+        
+        removeTail () 
+        snakeBody.push(newhead)
+       }
 
-    function newApplePosition () {
-        let randomRowIdx = Math.floor(Math.random () * (document.getElementsByClassName("row").length - 1))
-        let randomCellIdx = Math.floor(Math.random () * (document.getElementsByClassName("row").length - 1))
-        gameState.apple = [randomRowIdx, randomCellIdx]
-        
-        
-    }
-function renderApple() {
-    document.getElementById("currentNum").innerText = gameState.currentScore
-    document.getElementById("bestNum").innerText = gameState.bestScore
-    boardElm.children[gameState.apple[0]].children[gameState.apple[1]].className = 'apple'
-}
+
+
+
+
+function increaseScore () {
     
-    function removeTail () {
+    if (gameState.currentScore === gameScore.bestScore  ) {
+        console.log("+1")
+        gameState.currentScore ++
+        gameScore.bestScore ++
+    } else {
+        gameState.currentScore ++
+    }
+}
+
+
+
+function removeTail () {
         boardElm.children[gameState.snake.body[0][0]].children[gameState.snake.body[0][1]].className = 'cell'
         gameState.snake.body.shift()
     }
 
     
+function newApple () {
     
+    let snakeHead = gameState.snake.body[gameState.snake.body.length - 1]
+    console.log(snakeHead[0])
+    while((snakeHead[0] === gameState.apple[0]) && (snakeHead[1] === gameState.apple[1])) {
+        let randomRowIdx = Math.floor(Math.random () * (document.getElementsByClassName("row").length - 1))
+        let randomCellIdx = Math.floor(Math.random () * (document.getElementsByClassName("row").length - 1))
+        gameState.apple = [randomRowIdx, randomCellIdx]
+        
+    }
+    }
+
     
+    function  renderApple(){
     
-    
+    document.getElementById("currentNum").innerText = gameState.currentScore
+    document.getElementById("bestNum").innerText = gameScore.bestScore
+    boardElm.children[gameState.apple[0]].children[gameState.apple[1]].className = 'apple'
+}
+   
+
+   
+   
+   
+
+   
+   
+   
+   
+   
+   
     document.onkeydown = function keyPress(e) {
         {if (e.keyCode === 38) {
         gameState.snake.nextDirection = [-1, 0] // Up Key
@@ -205,17 +264,42 @@ function renderApple() {
       }
     }
     }
-    
+setInterval(() => {    
+    function runGame () {
+        tick ()
+        render ()
         
-    setInterval(() => {    
+    }
+       
+    
             if(gameState.gameRunning === true) {
-                tick ()
-                render()
+                runGame ()
+                
+                
+                
             }
+            
  
-    }, 4000 / 35)
+    }, 100)
+    
+
 
 }
+
 )
 
+resetButton.addEventListener('click', function clearBoard () {
+    
 
+let table = document.getElementById('grid')
+while (table.firstChild) {
+    table.removeChild(table.firstChild)
+}
+buildIntialState  ()
+  resetButton.className = 'hidden'
+  startButton.classList = 'startBut'
+    
+  
+     
+}
+)

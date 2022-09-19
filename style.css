@@ -76,10 +76,17 @@ margin-bottom: 20px;
 .startBut {
     height: 2.5vh;
     width: 8vh;
-    margin-top: 10px;
+    margin-top: 0;
     animation: transitionIn 1s;
 }
 
+
+.resetBut {
+    height: 2.5vh;
+    width: 8vh;
+    margin-top: 0;
+    animation: transitionIn 1s;
+}
 
 
 /*HIDE INPUT FIELDS AFTER INPUTTING NAME AND REVEAL START BUTTON*/

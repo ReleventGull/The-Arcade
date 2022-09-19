@@ -9,3 +9,14 @@ let gameState = {
 
 
 console.log(Math.floor(.3))
+
+
+
+
+
+   //appletick
+  //snakeTick
+    //Should add the new head using the direction given. If the head is greater than the board, return
+    
+            
+        //Check Apple and Snake Position
